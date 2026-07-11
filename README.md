@@ -34,11 +34,15 @@ The dataset contains 11,983 images from the TreeOfLife rare species collection, 
 
 Example images from the report illustrate the visual diversity of the classification task. The labels above each image correspond to biological families.
 
-![Example rare species images from different Chordata families](docs/assets/sample-family-images.jpg)
+<p align="center">
+  <img src="docs/assets/sample-family-images.jpg" alt="Example rare species images from different Chordata families" width="60%">
+</p>
 
 The dataset is strongly imbalanced: most families have fewer than 50 images, while only a small number have more than 200 images. This imbalance motivated the use of macro F1 as the main evaluation metric, because each family should contribute equally regardless of how many images it contains.
 
-![Animal family image-count distribution](docs/assets/family-distribution.png)
+<p align="center">
+  <img src="docs/assets/family-distribution.png" alt="Animal family image-count distribution" width="70%">
+</p>
 
 The image dataset is not included in this repository because of size and distribution constraints.
 
@@ -67,7 +71,9 @@ The final model combines:
 - RMSprop optimizer with cosine decay
 - Categorical cross-entropy without label smoothing
 
-![Final model architecture](docs/assets/final-model-architecture.png)
+<p align="center">
+  <img src="docs/assets/final-model-architecture.png" alt="Final model architecture" width="70%">
+</p>
 
 The architecture diagram is reproduced from the report. The implementation in `scripts/train_final_model.py` instantiates `EfficientNetV2B1`.
 
@@ -80,7 +86,9 @@ The final frozen-base model reached:
 - Test macro F1: 74.7%
 - Test weighted F1: 75.36%
 
-![Train and validation loss curves for the final frozen-base model](docs/assets/final-model-loss-freeze-base.png)
+<p align="center">
+  <img src="docs/assets/final-model-loss-freeze-base.png" alt="Train and validation loss curves for the final frozen-base model" width="80%">
+</p>
 
 The following table summarizes the main transfer-learning experiments from the report. Values are macro F1 percentages. `*` marks configurations with the best validation macro F1 score in their experiment group.
 
