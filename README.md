@@ -1,71 +1,75 @@
 # Rare Species Family Classification
 
-This repository contains a deep learning project for classifying rare species images into biological families. The work uses the TreeOfLife rare species dataset and compares progressively stronger image-classification pipelines before selecting a final EfficientNetV2-based transfer-learning model.
+This project builds a deep learning model to classify rare species images into biological families. It uses TreeOfLife rare species images, compares custom CNN and transfer-learning approaches, and selects an EfficientNetV2B1-based final model with image and phylum metadata inputs.
 
-The final training script combines image features with one-hot encoded phylum metadata and predicts one of 202 family classes.
+## Data
 
-## Project Overview
+The dataset contains 11,983 images from the TreeOfLife rare species collection, covering 202 animal families from the Animalia kingdom. The target variable is the biological family.
 
-- Task: multi-class image classification for rare species family prediction
-- Dataset: TreeOfLife rare species image dataset, approximately 12,000 images
-- Target: biological family, with 202 classes
-- Main model: EfficientNetV2B1 transfer learning
-- Extra input: phylum metadata encoded as tabular features
-- Framework: TensorFlow/Keras
-- Main evaluation metrics: macro F1 and weighted F1
+The dataset is strongly imbalanced: most families have fewer than 50 images, while only a small number have more than 200 images. This imbalance motivated the use of macro F1 as the main evaluation metric, because each family should contribute equally regardless of how many images it contains.
 
-## Repository Structure
+![Animal family image-count distribution](docs/assets/family-distribution.png)
+
+The image dataset is not included in this repository because of size and distribution constraints.
+
+Download the dataset from:
 
 ```text
-.
-├── main.py                         # Final training and evaluation entry point
-├── utils_.py                       # Data loading, model building, training helpers
-├── organizing_folders.py           # Dataset split and metadata preparation script
-├── requirements.txt                # Python dependencies
-├── preinstall.txt                  # Minimal pre-install dependency list
-├── notebooks/
-│   ├── 1_Building_original_model.ipynb
-│   ├── 2_Original_model_with_augmentation.ipynb
-│   ├── 3_Transfer_learning_selection.ipynb
-│   ├── 4_Final_model.ipynb
-│   ├── 5_Variational_autoencoder.ipynb
-│   └── best_model.h5
-├── docs/
-│   └── assets/                    # Figures extracted from the final report
-└── report/
-    └── GROUP_20.pdf
+https://drive.google.com/file/d/1PyxqW_nsORX4PetkQo6OIL0mUL1pFsTD/view
 ```
 
-## Modeling Workflow
+After downloading, place the extracted dataset folder in the project root with the name expected by `organizing_folders.py`:
 
-The notebooks document the main experiment path:
+```text
+rare_species 1/
+├── metadata.csv
+├── class_folder_1/
+├── class_folder_2/
+└── ...
+```
 
-1. Build an initial convolutional neural network baseline.
-2. Add image augmentation and regularization.
-3. Compare transfer-learning backbones.
-4. Train the selected final model.
-5. Explore a variational autoencoder as an additional representation-learning experiment.
+Then prepare the train, validation, and test folders:
 
-The production-style script in `main.py` reproduces the selected final setup using:
+```bash
+python organizing_folders.py
+```
 
-- `EfficientNetV2B1` with ImageNet weights
-- frozen convolutional base
-- global average pooling
-- phylum metadata as a second model input
+This creates:
+
+```text
+data/
+├── train/
+├── val/
+├── test/
+├── metadata_train.csv
+├── metadata_val.csv
+└── metadata_test.csv
+```
+
+## Project
+
+The work follows two modeling tracks:
+
+1. Build a CNN from scratch as a learning baseline.
+2. Compare transfer-learning pipelines using pretrained image backbones.
+
+The final model combines:
+
+- Image input resized to `224x224x3`
+- `EfficientNetV2B1` with ImageNet weights and frozen convolutional base
+- Global average pooling over image features
+- One-hot encoded phylum metadata as a second input
+- Concatenation of image and tabular features
+- Dropout of `0.1`
+- Softmax classification head with 202 output classes
 - RMSprop optimizer with cosine decay
-- categorical cross-entropy loss
-- macro and weighted F1 metrics
-- early stopping and checkpointing on validation loss
-
-### Final Model Architecture
-
-The final model uses a frozen EfficientNetV2B1 image backbone and concatenates the pooled image representation with one-hot encoded phylum metadata before the classification head.
+- Categorical cross-entropy without label smoothing
 
 ![Final model architecture](docs/assets/final-model-architecture.png)
 
-The diagram is reproduced from the report. The implementation in `main.py` instantiates `EfficientNetV2B1`.
+The architecture diagram is reproduced from the report. The implementation in `main.py` instantiates `EfficientNetV2B1`.
 
-### Results Summary
+## Results
 
 The final frozen-base model reached:
 
@@ -117,49 +121,31 @@ The following table summarizes the main transfer-learning experiments from the r
 | Base model selection fine-tune | EfficientNetB0 | 94.87 | 74.05 |
 | Base model selection fine-tune | EfficientNetV2B1 | 95.75 | 75.19 * |
 
-## Dataset
+The best custom CNN from scratch reached 22.25% validation macro F1. This gap supports the main project conclusion: transfer learning is much more effective for this small, imbalanced, fine-grained image dataset.
 
-The image dataset is not included in this repository because of size and distribution constraints.
-
-The full project dataset contains 11,983 images across 202 animal families. The distribution is highly imbalanced: most families have fewer than 50 images, while only a small number of families have more than 200 images.
-
-![Animal family image-count distribution](docs/assets/family-distribution.png)
-
-Download the dataset from:
+## Repository Structure
 
 ```text
-https://drive.google.com/file/d/1PyxqW_nsORX4PetkQo6OIL0mUL1pFsTD/view
+.
+├── main.py                         # Final training and evaluation entry point
+├── utils_.py                       # Data loading, model building, training helpers
+├── organizing_folders.py           # Dataset split and metadata preparation script
+├── requirements.txt                # Python dependencies
+├── preinstall.txt                  # Minimal pre-install dependency list
+├── notebooks/
+│   ├── 1_Building_original_model.ipynb
+│   ├── 2_Original_model_with_augmentation.ipynb
+│   ├── 3_Transfer_learning_selection.ipynb
+│   ├── 4_Final_model.ipynb
+│   ├── 5_Variational_autoencoder.ipynb
+│   └── best_model.h5
+├── docs/
+│   └── assets/                    # Figures extracted from the final report
+└── report/
+    └── GROUP_20.pdf
 ```
 
-After downloading, place the extracted dataset folder in the project root with the name expected by `organizing_folders.py`:
-
-```text
-rare_species 1/
-├── metadata.csv
-├── class_folder_1/
-├── class_folder_2/
-└── ...
-```
-
-Then prepare the train, validation, and test folders:
-
-```bash
-python organizing_folders.py
-```
-
-This creates the following structure:
-
-```text
-data/
-├── train/
-├── val/
-├── test/
-├── metadata_train.csv
-├── metadata_val.csv
-└── metadata_test.csv
-```
-
-## Setup
+## Scripts and Usage
 
 Create and activate a virtual environment:
 
@@ -175,11 +161,13 @@ pip install -r preinstall.txt
 pip install -r requirements.txt
 ```
 
-The project was built with TensorFlow 2.15 and Keras 2.15.
+Prepare the dataset:
 
-## Run Training
+```bash
+python organizing_folders.py
+```
 
-After preparing the `data/` directory, run the final model:
+Train and evaluate the final model:
 
 ```bash
 python main.py
@@ -196,6 +184,12 @@ Arguments:
 - `--epochs`: number of training epochs, default `80`
 - `--batch_size`: batch size, default `128`
 - `--image_size`: input image size as `HEIGHT,WIDTH`, default `224,224`
+
+Main scripts:
+
+- `organizing_folders.py`: splits the downloaded dataset into train, validation, and test folders and creates matching metadata CSV files.
+- `main.py`: loads prepared images and metadata, builds the final EfficientNetV2B1 dual-input model, trains it, and evaluates it on the test split.
+- `utils_.py`: contains reusable functions for image loading, metadata alignment, model construction, compilation, training, evaluation, and plotting.
 
 Training writes runtime artifacts such as `checkpoint.keras` and `metrics.csv`.
 
