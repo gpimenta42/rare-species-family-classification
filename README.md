@@ -18,34 +18,6 @@ Download the dataset from:
 https://drive.google.com/file/d/1PyxqW_nsORX4PetkQo6OIL0mUL1pFsTD/view
 ```
 
-After downloading, place the extracted dataset folder in the project root with the name expected by `organizing_folders.py`:
-
-```text
-rare_species 1/
-├── metadata.csv
-├── class_folder_1/
-├── class_folder_2/
-└── ...
-```
-
-Then prepare the train, validation, and test folders:
-
-```bash
-python organizing_folders.py
-```
-
-This creates:
-
-```text
-data/
-├── train/
-├── val/
-├── test/
-├── metadata_train.csv
-├── metadata_val.csv
-└── metadata_test.csv
-```
-
 ## Project
 
 The work follows two modeling tracks:
@@ -163,8 +135,32 @@ pip install -r requirements.txt
 
 Prepare the dataset:
 
+Place the extracted dataset folder in the project root with the name expected by `organizing_folders.py`:
+
+```text
+rare_species 1/
+├── metadata.csv
+├── class_folder_1/
+├── class_folder_2/
+└── ...
+```
+
+Then run:
+
 ```bash
 python organizing_folders.py
+```
+
+This creates:
+
+```text
+data/
+├── train/
+├── val/
+├── test/
+├── metadata_train.csv
+├── metadata_val.csv
+└── metadata_test.csv
 ```
 
 Train and evaluate the final model:
