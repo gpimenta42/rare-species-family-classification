@@ -39,7 +39,7 @@ The final model combines:
 
 ![Final model architecture](docs/assets/final-model-architecture.png)
 
-The architecture diagram is reproduced from the report. The implementation in `main.py` instantiates `EfficientNetV2B1`.
+The architecture diagram is reproduced from the report. The implementation in `scripts/train_final_model.py` instantiates `EfficientNetV2B1`.
 
 ## Results
 
@@ -104,22 +104,28 @@ The best custom CNN from scratch reached 22.25% validation macro F1. This gap su
 
 ```text
 .
-├── main.py                         # Final training and evaluation entry point
-├── utils_.py                       # Data loading, model building, training helpers
-├── organizing_folders.py           # Dataset split and metadata preparation script
 ├── requirements.txt                # Python dependencies
-├── preinstall.txt                  # Minimal pre-install dependency list
+├── scripts/
+│   ├── prepare_data.py             # Dataset split and metadata preparation
+│   ├── train_final_model.py        # Final model training and test evaluation
+│   └── evaluate_saved_model.py     # Evaluate the saved model on train/val/test
+├── src/
+│   └── rare_species_classification/
+│       ├── __init__.py
+│       └── utils.py                # Data loading, model building, training helpers
+├── models/
+│   └── best_model.h5               # Saved final model artifact
 ├── notebooks/
 │   ├── 1_Building_original_model.ipynb
 │   ├── 2_Original_model_with_augmentation.ipynb
 │   ├── 3_Transfer_learning_selection.ipynb
 │   ├── 4_Final_model.ipynb
-│   ├── 5_Variational_autoencoder.ipynb
-│   └── best_model.h5
+│   └── 5_Variational_autoencoder.ipynb
 ├── docs/
 │   └── assets/                    # Figures extracted from the final report
-└── report/
-    └── GROUP_20.pdf
+├── report/
+│   └── GROUP_20.pdf
+└── utils_.py                       # Compatibility shim for original notebooks
 ```
 
 ## Scripts and Usage
@@ -134,13 +140,12 @@ source .venv/bin/activate
 Install the dependencies:
 
 ```bash
-pip install -r preinstall.txt
 pip install -r requirements.txt
 ```
 
 Prepare the dataset:
 
-Place the extracted dataset folder in the project root with the name expected by `organizing_folders.py`:
+Place the extracted dataset folder in the project root with the default name expected by `scripts/prepare_data.py`:
 
 ```text
 rare_species 1/
@@ -153,7 +158,7 @@ rare_species 1/
 Then run:
 
 ```bash
-python organizing_folders.py
+python scripts/prepare_data.py
 ```
 
 This creates:
@@ -171,13 +176,13 @@ data/
 Train and evaluate the final model:
 
 ```bash
-python main.py
+python scripts/train_final_model.py
 ```
 
 Optional arguments:
 
 ```bash
-python main.py --epochs 80 --batch_size 128 --image_size 224,224
+python scripts/train_final_model.py --epochs 80 --batch_size 128 --image_size 224,224
 ```
 
 Arguments:
@@ -188,9 +193,18 @@ Arguments:
 
 Main scripts:
 
-- `organizing_folders.py`: splits the downloaded dataset into train, validation, and test folders and creates matching metadata CSV files.
-- `main.py`: loads prepared images and metadata, builds the final EfficientNetV2B1 dual-input model, trains it, and evaluates it on the test split.
-- `utils_.py`: contains reusable functions for image loading, metadata alignment, model construction, compilation, training, evaluation, and plotting.
+- `scripts/prepare_data.py`: splits the downloaded dataset into train, validation, and test folders and creates matching metadata CSV files.
+- `scripts/train_final_model.py`: loads prepared images and metadata, builds the final EfficientNetV2B1 dual-input model, trains it, and evaluates it on the test split.
+- `scripts/evaluate_saved_model.py`: loads `models/best_model.h5` and evaluates it on a selected prepared split.
+- `src/rare_species_classification/utils.py`: contains reusable functions for image loading, metadata alignment, model construction, compilation, training, evaluation, and plotting.
+
+Evaluate the saved model on a prepared split:
+
+```bash
+python scripts/evaluate_saved_model.py --split test --model models/best_model.h5
+```
+
+The `--split` argument accepts `train`, `val`, or `test`. The command expects the prepared `data/` folder and metadata CSV files created by `scripts/prepare_data.py`.
 
 Training writes runtime artifacts such as `checkpoint.keras` and `metrics.csv`.
 
@@ -198,7 +212,7 @@ Training writes runtime artifacts such as `checkpoint.keras` and `metrics.csv`.
 
 The repository includes:
 
-- `notebooks/best_model.h5`: saved model artifact from the notebook workflow
+- `models/best_model.h5`: saved model artifact from the notebook workflow
 - `report/GROUP_20.pdf`: project report with experiment details
 
 The raw image dataset and generated `data/` directory are intentionally excluded from version control.

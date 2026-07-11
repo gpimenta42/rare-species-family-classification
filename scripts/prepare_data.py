@@ -1,10 +1,14 @@
-import os
-import shutil
+from argparse import ArgumentParser
 import random
+import shutil
 from pathlib import Path
+from typing import Union
 import pandas as pd
 
-def split_images(source_dir: str, output_base: str, split_ratios=None):
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+
+def split_images(source_dir: Union[str, Path], output_base: Union[str, Path], split_ratios=None):
     if split_ratios is None:
         split_ratios = {"train": 0.7, "val": 0.15, "test": 0.15}
 
@@ -21,7 +25,6 @@ def split_images(source_dir: str, output_base: str, split_ratios=None):
             total = len(images)
             n_train = int(total * split_ratios["train"])
             n_val = int(total * split_ratios["val"])
-            n_test = total - n_train - n_val
 
             split_map = {
                 "train": images[:n_train],
@@ -29,15 +32,15 @@ def split_images(source_dir: str, output_base: str, split_ratios=None):
                 "test": images[n_train + n_val:]
             }
 
-            for split, split_images in split_map.items():
+            for split, images_for_split in split_map.items():
                 dest_dir = output_base / split / species_dir.name
                 dest_dir.mkdir(parents=True, exist_ok=True)
-                for img_path in split_images:
+                for img_path in images_for_split:
                     shutil.copy(img_path, dest_dir / img_path.name)
     print("✅ Image split complete!")
 
 
-def split_metadata(metadata_csv: str, output_base: str):
+def split_metadata(metadata_csv: Union[str, Path], output_base: Union[str, Path]):
     df_metadata = pd.read_csv(metadata_csv)
     df_metadata["file_path"] = df_metadata["file_path"].astype(str)
     output_base = Path(output_base)
@@ -65,10 +68,33 @@ def split_metadata(metadata_csv: str, output_base: str):
     print(f"✅ Metadata files saved! Train: {len(df_train)}, Val: {len(df_val)}, Test: {len(df_test)}")
 
 
-if __name__ == "__main__":
-    SOURCE_DIR = "rare_species 1"
-    OUTPUT_DIR = "data"
-    METADATA_FILE = "rare_species 1/metadata.csv"
+def main() -> None:
+    parser = ArgumentParser(description="Split rare species images and metadata into train/val/test folders.")
+    parser.add_argument(
+        "--source-dir",
+        type=Path,
+        default=PROJECT_ROOT / "rare_species 1",
+        help="Extracted dataset directory. Defaults to '<repo>/rare_species 1'.",
+    )
+    parser.add_argument(
+        "--output-dir",
+        type=Path,
+        default=PROJECT_ROOT / "data",
+        help="Output directory for prepared splits. Defaults to '<repo>/data'.",
+    )
+    parser.add_argument(
+        "--metadata-file",
+        type=Path,
+        default=None,
+        help="Metadata CSV path. Defaults to '<source-dir>/metadata.csv'.",
+    )
+    args = parser.parse_args()
 
-    split_images(SOURCE_DIR, OUTPUT_DIR)
-    split_metadata(METADATA_FILE, OUTPUT_DIR)
+    metadata_file = args.metadata_file or args.source_dir / "metadata.csv"
+
+    split_images(args.source_dir, args.output_dir)
+    split_metadata(metadata_file, args.output_dir)
+
+
+if __name__ == "__main__":
+    main()
