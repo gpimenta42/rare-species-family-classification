@@ -2,9 +2,39 @@
 
 This project builds a deep learning model to classify rare species images into biological families. It uses TreeOfLife rare species images, compares custom CNN and transfer-learning approaches, and selects an EfficientNetV2B1-based final model with image and phylum metadata inputs.
 
+## Technical Stack
+
+| Area | Tools and skills used |
+| --- | --- |
+| Programming environment | Python, Jupyter |
+| Deep learning | TensorFlow, Keras, KerasCV, Keras Tuner |
+| Computer vision | CNNs, transfer learning, EfficientNetV2B1, image augmentation, OpenCV, Pillow |
+| Data processing and evaluation | pandas, NumPy, scikit-learn, macro F1, weighted F1 |
+| Visualization | Matplotlib, Seaborn |
+| Reproducibility and version control | Git, GitHub, structured scripts, saved model evaluation |
+
+## Key Outcomes
+
+- Built a deep learning pipeline for rare species family classification using 11,983 images across 202 biological families.
+- Compared custom CNNs, augmentation strategies, metadata fusion, batch sizes, and multiple transfer-learning backbones.
+- Improved validation macro F1 from 22.25% with the best custom CNN baseline to 74.4% with the final EfficientNetV2B1-based model.
+- Reached 74.7% test macro F1 and 75.36% test weighted F1 on a strongly imbalanced fine-grained image classification task.
+
+## Challenges and Design Choices
+
+| Challenge | Design choice |
+| --- | --- |
+| Imbalanced 202-class family classification | Used macro F1 as the main metric so each family contributes equally, reported weighted F1 for comparison, and emphasized transfer learning over the custom CNN baseline. |
+| Limited rare-species image data | Compared pretrained backbones and selected EfficientNetV2B1 with ImageNet weights to improve generalization on a small fine-grained dataset. |
+| Combining image and metadata inputs | Built a multi-input model: EfficientNetV2B1 extracts image features, phylum metadata is one-hot encoded, and both feature streams are concatenated before the classification head. |
+
 ## Data
 
 The dataset contains 11,983 images from the TreeOfLife rare species collection, covering 202 animal families from the Animalia kingdom. The target variable is the biological family.
+
+Example images from the report illustrate the visual diversity of the classification task. The labels above each image correspond to biological families.
+
+![Example rare species images from different Chordata families](docs/assets/sample-family-images.jpg)
 
 The dataset is strongly imbalanced: most families have fewer than 50 images, while only a small number have more than 200 images. This imbalance motivated the use of macro F1 as the main evaluation metric, because each family should contribute equally regardless of how many images it contains.
 
