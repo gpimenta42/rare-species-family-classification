@@ -54,6 +54,9 @@ The final frozen-base model reached:
 
 The following table summarizes the main transfer-learning experiments from the report. Values are macro F1 percentages. `*` marks configurations with the best validation macro F1 score in their experiment group.
 
+<details>
+<summary>Expand transfer-learning experiment table</summary>
+
 | Experiment group | Configuration | Train macro F1 (%) | Validation macro F1 (%) |
 | --- | --- | ---: | ---: |
 | Feature selection | Without tabular data | 70.94 | 65.40 |
@@ -92,6 +95,8 @@ The following table summarizes the main transfer-learning experiments from the r
 | Base model selection pre-tune | ConvNeXtTiny | 81.23 | 65.50 |
 | Base model selection fine-tune | EfficientNetB0 | 94.87 | 74.05 |
 | Base model selection fine-tune | EfficientNetV2B1 | 95.75 | 75.19 * |
+
+</details>
 
 The best custom CNN from scratch reached 22.25% validation macro F1. This gap supports the main project conclusion: transfer learning is much more effective for this small, imbalanced, fine-grained image dataset.
 
