@@ -35,13 +35,13 @@ The dataset contains 11,983 images from the TreeOfLife rare species collection, 
 Example images from the report illustrate the visual diversity of the classification task. The labels above each image correspond to biological families.
 
 <p align="center">
-  <img src="docs/assets/sample-family-images.jpg" alt="Example rare species images from different Chordata families" width="60%">
+  <img src="docs/assets/sample-family-images.jpg" alt="Example rare species images from different Chordata families" width="80%">
 </p>
 
 The dataset is strongly imbalanced: most families have fewer than 50 images, while only a small number have more than 200 images. This imbalance motivated the use of macro F1 as the main evaluation metric, because each family should contribute equally regardless of how many images it contains.
 
 <p align="center">
-  <img src="docs/assets/family-distribution.png" alt="Animal family image-count distribution" width="70%">
+  <img src="docs/assets/family-distribution.png" alt="Animal family image-count distribution" width="80%">
 </p>
 
 The image dataset is not included in this repository because of size and distribution constraints.
@@ -87,7 +87,7 @@ The final frozen-base model reached:
 - Test weighted F1: 75.36%
 
 <p align="center">
-  <img src="docs/assets/final-model-loss-freeze-base.png" alt="Train and validation loss curves for the final frozen-base model" width="80%">
+  <img src="docs/assets/final-model-loss-freeze-base.png" alt="Train and validation loss curves for the final frozen-base model" width="70%">
 </p>
 
 The following table summarizes the main transfer-learning experiments from the report. Values are macro F1 percentages. `*` marks configurations with the best validation macro F1 score in their experiment group.
