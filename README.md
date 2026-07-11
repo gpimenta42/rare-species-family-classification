@@ -98,41 +98,41 @@ The following table summarizes the main transfer-learning experiments from the r
 | Experiment group | Configuration | Train macro F1 (%) | Validation macro F1 (%) |
 | --- | --- | ---: | ---: |
 | Feature selection | Without tabular data | 70.94 | 65.40 |
-| Feature selection | With tabular data, no dense layer after concat | 72.30 | 66.58 * |
-| Feature selection | With tabular data, dense layer after concat | 70.97 | 66.28 * |
+|  | With tabular data, no dense layer after concat | 72.30 | 66.58 * |
+|  | With tabular data, dense layer after concat | 70.97 | 66.28 * |
 | Batch size | 32 | 71.82 | 66.01 |
-| Batch size | 64 | 83.03 | 70.82 |
-| Batch size | 128 | 88.60 | 72.16 * |
-| Batch size | 224 | 89.94 | 71.69 * |
+|  | 64 | 83.03 | 70.82 |
+|  | 128 | 88.60 | 72.16 * |
+|  | 224 | 89.94 | 71.69 * |
 | Augmentations pre-tune | None | 85.52 | 68.51 * |
-| Augmentations pre-tune | Random contrast | 84.52 | 67.38 |
-| Augmentations pre-tune | Random flip H+V | 76.49 | 66.96 |
-| Augmentations pre-tune | Random flip H | 84.70 | 68.43 * |
-| Augmentations pre-tune | Random rotation | 72.37 | 66.19 |
-| Augmentations pre-tune | Random zoom | 78.97 | 67.06 |
-| Augmentations pre-tune | Random crop resize | 81.03 | 67.02 |
-| Augmentations pre-tune | Random Gaussian blur | 85.88 | 68.40 * |
-| Augmentations pre-tune | Random hue | 81.38 | 65.45 |
-| Augmentations pre-tune | Random channel shift | 82.16 | 65.85 |
+|  | Random contrast | 84.52 | 67.38 |
+|  | Random flip H+V | 76.49 | 66.96 |
+|  | Random flip H | 84.70 | 68.43 * |
+|  | Random rotation | 72.37 | 66.19 |
+|  | Random zoom | 78.97 | 67.06 |
+|  | Random crop resize | 81.03 | 67.02 |
+|  | Random Gaussian blur | 85.88 | 68.40 * |
+|  | Random hue | 81.38 | 65.45 |
+|  | Random channel shift | 82.16 | 65.85 |
 | Augmentation fine-tune | None | 97.37 | 73.38 * |
-| Augmentation fine-tune | Random contrast | 97.58 | 73.44 * |
-| Augmentation fine-tune | Random flip H | 97.26 | 73.31 * |
-| Augmentation fine-tune | Random rotation | 87.05 | 71.89 |
-| Augmentation fine-tune | Random zoom | 94.37 | 73.34 * |
-| Augmentation fine-tune | Random Gaussian blur | 97.36 | 73.45 * |
+|  | Random contrast | 97.58 | 73.44 * |
+|  | Random flip H | 97.26 | 73.31 * |
+|  | Random rotation | 87.05 | 71.89 |
+|  | Random zoom | 94.37 | 73.34 * |
+|  | Random Gaussian blur | 97.36 | 73.45 * |
 | Combined augmentation fine-tune | None | 97.87 | 74.22 * |
-| Combined augmentation fine-tune | Manual combined | 94.42 | 73.46 * |
-| Combined augmentation fine-tune | RandAugment | 85.14 | 68.48 |
+|  | Manual combined | 94.42 | 73.46 * |
+|  | RandAugment | 85.14 | 68.48 |
 | Base model selection pre-tune | Xception | 89.69 | 56.52 |
-| Base model selection pre-tune | ResNet50V2 | 91.34 | 55.73 |
-| Base model selection pre-tune | InceptionV3 | 92.35 | 51.79 |
-| Base model selection pre-tune | DenseNet121 | 74.38 | 60.06 |
-| Base model selection pre-tune | EfficientNetB0 | 92.09 | 71.96 * |
-| Base model selection pre-tune | EfficientNetV2B1 | 87.69 | 71.09 * |
-| Base model selection pre-tune | EfficientNetV2S | 82.38 | 68.10 |
-| Base model selection pre-tune | ConvNeXtTiny | 81.23 | 65.50 |
+|  | ResNet50V2 | 91.34 | 55.73 |
+|  | InceptionV3 | 92.35 | 51.79 |
+|  | DenseNet121 | 74.38 | 60.06 |
+|  | EfficientNetB0 | 92.09 | 71.96 * |
+|  | EfficientNetV2B1 | 87.69 | 71.09 * |
+|  | EfficientNetV2S | 82.38 | 68.10 |
+|  | ConvNeXtTiny | 81.23 | 65.50 |
 | Base model selection fine-tune | EfficientNetB0 | 94.87 | 74.05 |
-| Base model selection fine-tune | EfficientNetV2B1 | 95.75 | 75.19 * |
+|  | EfficientNetV2B1 | 95.75 | 75.19 * |
 
 </details>
 
