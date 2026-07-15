@@ -2,16 +2,16 @@
 
 This project builds a deep learning model to classify rare species images into biological families. It uses TreeOfLife rare species images, compares custom CNN and transfer-learning approaches, and selects an EfficientNetV2B1-based final model with image and phylum metadata inputs.
 
-## Technical Stack
+## Methods and Tools
 
-| Area | Tools and skills used |
+| Area | Used in this project |
 | --- | --- |
-| Programming environment | Python, Jupyter |
-| Deep learning | TensorFlow, Keras, KerasCV, Keras Tuner |
-| Computer vision | CNNs, transfer learning, EfficientNetV2B1, image augmentation, OpenCV, Pillow |
-| Data processing and evaluation | pandas, NumPy, scikit-learn, macro F1, weighted F1 |
-| Visualization | Matplotlib, Seaborn |
-| Reproducibility and version control | Git, GitHub, structured scripts, saved model evaluation |
+| Classification setup | Fine-grained 202-class rare species family classification |
+| Modeling | Custom CNN baselines, transfer learning, EfficientNetV2B1 final model |
+| Multi-input learning | Image branch combined with one-hot encoded phylum metadata |
+| Training experiments | Augmentation strategy comparison, batch-size search, backbone comparison, frozen-base and fine-tuning runs |
+| Evaluation | Macro F1 for class imbalance, weighted F1, train/validation/test comparison |
+| Python tools | TensorFlow, Keras, KerasCV, Keras Tuner, OpenCV, Pillow, pandas, NumPy, scikit-learn |
 
 ## Key Outcomes
 
